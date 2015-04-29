@@ -1,0 +1,153 @@
+% -
+ %   Copyright (C) 2015  Beniamine, David <David@Beniamine.net>
+ %   Author: Beniamine, David <David@Beniamine.net>
+ %   
+ %   This program is free software: you can redistribute it and/or modify
+ %   it under the terms of the GNU General Public License as published by
+ %   the Free Software Foundation, either version 3 of the License, or
+ %   (at your option) any later version.
+ %   
+ %   This program is distributed in the hope that it will be useful,
+ %   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ %   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ %   GNU General Public License for more details.
+ %   
+ %   You should have received a copy of the GNU General Public License
+ %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ %%
+
+\begin{tikzpicture}[
+        scale=0.75,
+        start chain=1 going below,
+        start chain=2 going right,
+        node distance=1mm,
+        desc/.style={
+            scale=0.75,
+            on chain=2,
+            rectangle,
+            rounded corners,
+            draw=black,
+            very thick,
+            text centered,
+            text width=8cm,
+            minimum height=12mm,
+        },
+        human/.style={
+            fill=green
+        },
+        app/.style={
+            fill=blue!60
+        },
+        preOS/.style={
+            fill=blue!90
+        },
+        OS/.style={
+            fill=orange!60
+        },
+        kern/.style={
+            fill=orange
+        },
+        HW/.style={
+            fill=red
+        },
+        level/.style={
+            scale=0.75,
+            on chain=1,
+            minimum height=12mm,
+            text width=5cm,
+            text centered
+        },
+        every node/.style={font=\sffamily}
+    ]
+
+%layers
+    \pgfdeclarelayer{background}
+    \pgfdeclarelayer{foreground}
+    \pgfsetlayers{background,main,foreground}
+
+% Levels
+    \begin{pgfonlayer}{foreground}
+
+        \node [level] (user) {};
+
+% Desktop env
+        \uncover<6->{
+            \node [level] (app) {Desktop Environment};
+        }
+        \uncover<2->{
+            \node [level] (appEnv) {};
+            \node [level] (appMgmt) {};
+        }
+
+
+        \uncover<3->{
+            \node [level] (OS) {Operating System: GNU};
+            \node [level] (OS1) {};
+            \node [level] (OS2) {};
+        }
+
+        \uncover<4->{
+            \node [level] (kern) {kernel: Linux};
+            \node [level] (kern1) {};
+        }
+
+        \node [level] (HW) {Hardware};
+
+% Description and groups
+        \chainin (user);
+        \node [desc,human] (UserDesc) {User};
+
+% Desktop env
+        \uncover<2->{
+            \node [desc, continue chain=going below,app] (Applications) {Applications};
+            \node [desc,app] (AppEnv) {Environment settings (windows decoration, interface)};
+            \node [desc,preOS] (AppInst) {Applications installation and Management};
+        }
+    \end{pgfonlayer}
+
+    \only<6->{
+        \begin{pgfonlayer}{main}
+            \node[draw,dotted,fit=(Applications) (appEnv),fill=blue!20]  (DEG) {};
+        \end{pgfonlayer}
+    }
+
+    \begin{pgfonlayer}{foreground}
+        \uncover<3->{
+            \node [desc,OS] (OSHL) {Play sound, create window \dots};
+            \node [desc,OS] (OSML) {Connect Network start application \dots};
+            \node [desc,OS] (OSLL) {Open file, access Memory \dots};
+        }
+    \end{pgfonlayer}
+
+    \only<5->{
+        \begin{pgfonlayer}{main}
+            \node[draw,dotted,fit=(OSHL) (kern1),fill=orange!20]  (OSG) {};
+        \end{pgfonlayer}
+    }
+
+    \begin{pgfonlayer}{foreground}
+
+        \uncover<4->{
+            \node [desc,kern] (KernHL) {Process management \dots};
+            \node [desc,kern] (KernLL) {Access RAM / Disk / Network \dots};
+        }
+
+        \node [desc,HW] (HW) {Computer};
+    \end{pgfonlayer}
+
+%Groups
+
+
+
+% Distribution
+    \only<7->{
+        \begin{pgfonlayer}{main}
+            \node[fit=(DEG) (OSG)]  (DISTI) {};
+            \node[right=of DISTI.east]  (DISTT) {Distribution};
+        \end{pgfonlayer}
+
+        \begin{pgfonlayer}{background}
+            \node[draw,dotted,fit=(DISTI) (DISTT), fill=green!20]  (DISTG) {};
+        \end{pgfonlayer}
+    }
+\end{tikzpicture}

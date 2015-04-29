@@ -1,0 +1,51 @@
+% -
+ %   Copyright (C) 2015  Beniamine, David <David@Beniamine.net>
+ %   Author: Beniamine, David <David@Beniamine.net>
+ %   
+ %   This program is free software: you can redistribute it and/or modify
+ %   it under the terms of the GNU General Public License as published by
+ %   the Free Software Foundation, either version 3 of the License, or
+ %   (at your option) any later version.
+ %   
+ %   This program is distributed in the hope that it will be useful,
+ %   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ %   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ %   GNU General Public License for more details.
+ %   
+ %   You should have received a copy of the GNU General Public License
+ %   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ %%
+
+\begin{tikzpicture}
+
+    \pic(code) at (.5,0) [draw, fill = gray!30,scale=.4,
+    pic text ={
+    int main()\{\\\quad printf(``Bom dia'');\\\quad return 0;\\\}}] {computer};
+    \node[] at ($(code-c.north)+(0,.5)$) {Code source (human readable)};
+
+    \uncover<2->{
+
+        \pic (bin) [draw, fill = gray!70,scale=.4,
+        pic text ={0100010001000101010
+                   1110101000010101010
+                   0101101000101010101
+                   1010100110010111010}]
+        at (0:7) {computer};
+        \node[] at ($(bin-c.north)+(0,.5)$) {Binary (computer language)};
+
+        \draw[->,thick] (code-c) to[bend left=30] node[above]{compilation} (bin-c);
+    }
+
+    \uncover<3->{
+        \draw[->,thick] (code-c) to[bend left=30] node[above]{compilation} (bin-c);
+    }
+
+    \uncover<4->{
+        \draw[->,very thin,dashed] (bin-c) to[bend left=30]  node[above]{reverse engineering} (code-c);
+    }
+
+    \uncover<5->{
+        \node[fill=red, rounded corners,text centered] (q) at
+        ($(code-c.south)+(3.25,1.7)$) {Which version should we distribute ?};
+    }
+\end{tikzpicture}
